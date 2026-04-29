@@ -1,6 +1,7 @@
 package com.henriquebazdev.auth_api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +47,14 @@ public class UsuarioController {
     @GetMapping("/usuarios")
     public ResponseEntity<String> usuarioAutenticado() {
         return ResponseEntity.ok("Você está autenticado!");
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> dadosUsuarioAutenticado() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Usuario usuario = repository.findByEmail(email);
+
+        return ResponseEntity.ok(usuario);
     }
 }
